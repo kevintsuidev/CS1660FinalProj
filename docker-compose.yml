@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  gui:
+    build: ./gui
+    volumes:
+      - ./gui:/gui
+    ports:
+      - 5000:5000
+  rstudio:
+    build: ./rstudio
+    volumes:
+      - ./rstudio:/rstudio
+    ports:
+      - 8787:8787
+    environment:
+      - DISABLE_AUTH=true
+  markdown:
+    build: ./markdown
+    volumes:
+      - ./markdown:/markdown
+    ports:
+      - 9090:80
+  jupyter:
+    build: ./jupyter
+    volumes:
+      - ./jupyter:/jupyter
+    ports:
+      - 8888:8888
+  tableau:
+    build: ./tableau
+    volumes:
+      - ./tableau:/tableau
+    ports:
+      - 8850:8850
