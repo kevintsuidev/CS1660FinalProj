@@ -27,9 +27,83 @@ services:
       - ./jupyter:/jupyter
     ports:
       - 8888:8888
-  tableau:
-    build: ./tableau
+  orange:
+    build: ./orange
     volumes:
-      - ./tableau:/tableau
+      - ./orange:/orange
     ports:
-      - 8850:8850
+      - 6901:6901
+    environment:
+      -  PASSWORD=orange
+  vscode:
+    build: ./vscode
+    environment:
+      - PASSWORD=password
+      - DOCKER_USER=${USER}
+      - HTTPS_ENABLED=true
+      - APP_PORT=8443
+      - APP_BIND_HOST=0.0.0.0
+      - EXTENSIONS=ms-python.python,ms-toolsai.jupyter,tushortz.python-extended-snippets,andyyaldoo.vscode-json,golang.go,redhat.vscode-yaml,vscode-icons-team.vscode-icons
+    user: "$UID:$GID"
+    volumes:
+      - $PWD/workspace:/home/coder/workspace
+      - $PWD/config:/home/coder/.config
+      - $PWD/certs:/home/coder/.certs
+    ports:
+      - 8443:8443
+  spark:
+    image: docker.io/bitnami/spark:3
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    ports:
+      - '8080:8080'
+  spark-worker-1:
+    image: docker.io/bitnami/spark:3
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+  spark-worker-2:
+    image: docker.io/bitnami/spark:3
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+  # spyder:
+  #   build: ./spyder
+  #   volumes:
+  #     - ./spyder:/spyder
+  #   ports:
+  #     - 6080:6080
+  tensorflow:
+    build: ./tensorflow
+    volumes:
+      - ./tensorflow:/tensorflow
+    ports:
+      - 9999:8080
+  git:
+    build: ./git
+    volumes:
+      - ./git:/git
+    ports:
+      - 9080:8080
+  # hadoop:
+  #   build: ./hadoop
+  #   volumes:
+  #     - ./hadoop:/hadoop
+  #   ports:
+  #     - 9595:8080
