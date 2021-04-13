@@ -1,33 +1,49 @@
-FROM bde2020/hadoop-base:2.0.0-hadoop3.2.1-java8
+FROM debian:buster
 
-# USER 0
+RUN set -ex; \
+    apt-get update; \
+    apt-get -y install sudo; \
+    sudo apt -y update; \
+    sudo apt -y install
 
-LABEL MAINTAINER Ivan Ermilov <ivan.s.ermilov@gmail.com>
+RUN sudo apt-get install default-jre -y
+RUN sudo apt install curl -y
+RUN sudo apt-get install git wget vim ssh -y
+RUN wget https://archive.apache.org/dist/hadoop/core/hadoop-3.3.0/hadoop-3.3.0.tar.gz
+RUN tar zxvf hadoop-3.3.0.tar.gz
 
-HEALTHCHECK CMD curl -f http://localhost:9870/ || exit 1
+RUN mv hadoop-3.3.0 /usr/local/hadoop && \
+    mkdir /usr/local/hadoop/logs
 
-ENV HDFS_CONF_dfs_namenode_name_dir=file:///hadoop/dfs/name
-RUN mkdir -p /hadoop/dfs/name
-VOLUME /hadoop/dfs/name
+RUN echo "export HADOOP_HOME=/usr/local/hadoop \
+nexport HADOOP_INSTALL=/usr/local/hadoop \
+nexport HADOOP_MAPRED_HOME=/usr/local/hadoop \
+nexport HADOOP_COMMON_HOME=/usr/local/hadoop \
+nexport HADOOP_HDFS_HOME=/usr/local/hadoop \
+nexport YARN_HOME=/usr/local/hadoop \
+nexport HADOOP_COMMON_LIB_NATIVE_DIR=/usr/local/hadoop/lib/native \
+nexport PATH=$PATH:/usr/local/hadoop/sbin:/usr/local/hadoop/bin \
+nexport HADOOP_OPTS=\"-Djava.library.path=/usr/local/hadoop/lib/native\"\
+nexport HDFS_NAMENODE_USER=root\
+nexport HDFS_DATANODE_USER=root\nexport YARN_RESOURCEMANAGER_USER=root\nexport YARN_NODEMANAGER_USER=root\nexport HDFS_SECONDARYNAMENODE_USER=root\n" >> /root/.bashrc
 
-ADD run.sh /run.sh
-RUN chmod a+x /run.sh
+RUN echo "export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 " >> /usr/local/hadoop/etc/hadoop/hadoop-env.sh
 
-# FROM debian:buster
+RUN echo "export HADOOP_CLASSPATH+=\" /usr/local/hadoop/lib/*.jar\"" >> /usr/local/hadoop/etc/hadoop/hadoop-env.sh
+
 
 # Install git, supervisor, VNC, & X11 packages
 RUN set -ex; \
     apt-get update; \
     apt-get install -y \
-    bash \
-    fluxbox \
-    git \
-    net-tools \
-    novnc \
-    supervisor \
-    x11vnc \
-    xterm \
-    xvfb
+      bash \
+      fluxbox \
+      net-tools \
+      novnc \
+      supervisor \
+      x11vnc \
+      xterm \
+      xvfb
 
 # Setup demo environment variables
 ENV HOME=/root \
@@ -40,6 +56,7 @@ ENV HOME=/root \
     DISPLAY_HEIGHT=768 \
     RUN_XTERM=yes \
     RUN_FLUXBOX=yes
-COPY . .
-CMD ["/wrapper.sh"]
+    
+COPY . /app
+CMD ["./app/entrypoint.sh"]
 EXPOSE 8080
