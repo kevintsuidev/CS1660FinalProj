@@ -15,17 +15,20 @@ RUN tar zxvf hadoop-3.3.0.tar.gz
 RUN mv hadoop-3.3.0 /usr/local/hadoop && \
     mkdir /usr/local/hadoop/logs
 
-RUN echo "export HADOOP_HOME=/usr/local/hadoop \
-nexport HADOOP_INSTALL=/usr/local/hadoop \
-nexport HADOOP_MAPRED_HOME=/usr/local/hadoop \
-nexport HADOOP_COMMON_HOME=/usr/local/hadoop \
-nexport HADOOP_HDFS_HOME=/usr/local/hadoop \
-nexport YARN_HOME=/usr/local/hadoop \
-nexport HADOOP_COMMON_LIB_NATIVE_DIR=/usr/local/hadoop/lib/native \
-nexport PATH=$PATH:/usr/local/hadoop/sbin:/usr/local/hadoop/bin \
-nexport HADOOP_OPTS=\"-Djava.library.path=/usr/local/hadoop/lib/native\"\
-nexport HDFS_NAMENODE_USER=root\
-nexport HDFS_DATANODE_USER=root\nexport YARN_RESOURCEMANAGER_USER=root\nexport YARN_NODEMANAGER_USER=root\nexport HDFS_SECONDARYNAMENODE_USER=root\n" >> /root/.bashrc
+RUN echo "export HADOOP_HOME=/usr/local/hadoop \n
+export HADOOP_INSTALL=/usr/local/hadoop \n
+export HADOOP_MAPRED_HOME=/usr/local/hadoop \n
+export HADOOP_COMMON_HOME=/usr/local/hadoop \n
+export HADOOP_HDFS_HOME=/usr/local/hadoop \n
+export YARN_HOME=/usr/local/hadoop \n
+export HADOOP_COMMON_LIB_NATIVE_DIR=/usr/local/hadoop/lib/native \n
+export PATH=$PATH:/usr/local/hadoop/sbin:/usr/local/hadoop/bin \n
+export HADOOP_OPTS=\"-Djava.library.path=/usr/local/hadoop/lib/native\"\n
+export HDFS_NAMENODE_USER=root\n
+export HDFS_DATANODE_USER=root\n
+export YARN_RESOURCEMANAGER_USER=root\n
+export YARN_NODEMANAGER_USER=root\n
+export HDFS_SECONDARYNAMENODE_USER=root\n" >> /root/.bashrc
 
 RUN echo "export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 " >> /usr/local/hadoop/etc/hadoop/hadoop-env.sh
 
