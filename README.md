@@ -2,8 +2,11 @@
 This is the first project for CS1660. Follow instructions below to get everything setup.
 # Setup
 1.Pull the github repository onto computer.
+
 2.CD into the directory with the docker-compose.yml file and run "docker-compose up"
+
 3.All the containers should start downloaded the required files to run
+
 4.Once the containers have pulled all the needed information, the gui should be running at localhost:5000. From there you can click any and all of the links to navigated to each program
 
 #Addition Setup for Applications
