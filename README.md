@@ -1,5 +1,7 @@
 # CS1660FinalProj
 This is the first project for CS1660. Follow instructions below to get everything setup.
+
+Link for the demo: https://drive.google.com/file/d/1N0P5kgf-OsLqnDAj-mWXcoM3qpeN2fCE/view?usp=sharing
 # Setup
 1.Pull the github repository onto computer.
 
